@@ -36,7 +36,7 @@ setgid 65535
 setuid 65535
 stacksize 2621440
 flush
-auth strong
+auth none
 
 users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
 $(awk -F "/" '{print "auth strong\n" \
@@ -48,7 +48,7 @@ EOF
 
 gen_data() {
     seq $FIRST_PORT $LAST_PORT | while read port; do
-        echo "$(random)/$(random)/$IP4/$port/$(gen64 $IP6)"
+        echo "$IP4/$port/$(gen64 $IP6)"
     done
 }
 
@@ -60,8 +60,6 @@ EOF
 
 gen_proxy_file_for_user() {
     cat >proxy.txt <<EOF
-$(awk -F "/" '{print $3 ":" $4 ":" $1 ":" $2 }' ${WORKDATA})
-EOF
 }
 
 upload_proxy() {
